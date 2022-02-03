@@ -13,9 +13,9 @@ INSTALL ?= install
 PREFIX ?= /usr/local
 SHAREDIR ?= ${PREFIX}/share
 
-SRC = abduco.c
+SRC = abduco-sb.c
 
-all: abduco
+all: abduco-sb
 
 config.h:
 	cp config.def.h config.h
@@ -23,19 +23,19 @@ config.h:
 config.mk:
 	@touch $@
 
-abduco: config.h config.mk *.c
-	${CC} ${CFLAGS} ${CFLAGS_STD} ${CFLAGS_AUTO} ${CFLAGS_EXTRA} ${SRC} ${LDFLAGS} ${LDFLAGS_STD} ${LDFLAGS_AUTO} -o $@
+abduco-sb: config.h config.mk *.c
+	${CC} ${CFLAGS} ${CFLAGS_STD} ${CFLAGS_AUTO} ${CFLAGS_EXTRA} ${SRC} ${LDFLAGS} ${LDFLAGS_STD} ${LDFLAGS_AUTO} -o abduco-sb
 
 debug: clean
 	make CFLAGS_EXTRA='${CFLAGS_DEBUG}'
 
 clean:
 	@echo cleaning
-	@rm -f abduco abduco-*.tar.gz
+	@rm -f abduco-sb abduco-sb-*.tar.gz
 
 dist: clean
 	@echo creating dist tarball
-	@git archive --prefix=abduco-${VERSION}/ -o abduco-${VERSION}.tar.gz HEAD
+	@git archive --prefix=abduco-${VERSION}/ -o abduco-sb-${VERSION}.tar.gz HEAD
 
 installdirs:
 	@${INSTALL} -d ${DESTDIR}${PREFIX}/bin \
@@ -43,25 +43,25 @@ installdirs:
 
 install: abduco installdirs
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
-	@${INSTALL} -m 0755 abduco ${DESTDIR}${PREFIX}/bin
+	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
 	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@sed "s/VERSION/${VERSION}/g" < abduco.1 > ${DESTDIR}${MANPREFIX}/man1/abduco.1
-	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco.1
+	@sed "s/VERSION/${VERSION}/g" < abduco.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
+	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
 
 install-strip: install
-	${STRIP} ${DESTDIR}${PREFIX}/bin/abduco
+	${STRIP} ${DESTDIR}${PREFIX}/bin/abduco-sb
 
 install-completion:
 	@echo installing zsh completion file to ${DESTDIR}${SHAREDIR}/zsh/site-functions
-	@install -Dm644 contrib/abduco.zsh ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco
+	@install -Dm644 contrib/abduco.zsh ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco-sb
 
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
-	@rm -f ${DESTDIR}${PREFIX}/bin/abduco
+	@rm -f ${DESTDIR}${PREFIX}/bin/abduco-sb
 	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
-	@rm -f ${DESTDIR}${MANPREFIX}/man1/abduco.1
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
 	@echo removing zsh completion file from ${DESTDIR}${SHAREDIR}/zsh/site-functions
-	@rm -f ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco
+	@rm -f ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco-sb
 
 .PHONY: all clean dist install installdirs install-strip install-completion uninstall debug
