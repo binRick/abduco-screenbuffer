@@ -1,0 +1,9 @@
+/config.h
+/config.mk
+/abduco
+*.css
+*.gcda
+*.gcno
+*.gcov
+*.html
+*.o
