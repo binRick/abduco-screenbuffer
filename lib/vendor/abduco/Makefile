@@ -10,7 +10,7 @@ LDFLAGS_STD ?= -lc -lutil
 STRIP ?= strip
 INSTALL ?= install
 
-PREFIX ?= /usr/local
+PREFIX ?= /usr
 SHAREDIR ?= ${PREFIX}/share
 
 SRC = abduco-sb.c
