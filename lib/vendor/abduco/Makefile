@@ -10,9 +10,9 @@ LDFLAGS_STD ?= -lc -lutil
 STRIP ?= strip
 INSTALL ?= install
 
-PREFIX ?= /usr
+PREFIX ?= /local
 SHAREDIR ?= ${PREFIX}/share
-
+DESTDIR = /usr
 SRC = abduco-sb.c
 
 all: abduco-sb
@@ -39,15 +39,15 @@ dist: clean
 
 installdirs:
 	@${INSTALL} -d ${DESTDIR}${PREFIX}/bin \
-		${DESTDIR}${MANPREFIX}/man1
+		${DESTDIR}${MANPREFIX}/man1||true
 
 install: abduco-sb installdirs
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
-	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1
-	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@sed "s/VERSION/${VERSION}/g" < abduco.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
-	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
+	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
+	@mkdir -p ${DESTDIR}${MANPREFIX}/man1||true
+	@sed "s/VERSION/${VERSION}/g" < abduco.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
+	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
 
 install-strip: install
 	${STRIP} ${DESTDIR}${PREFIX}/bin/abduco-sb
@@ -59,8 +59,8 @@ install-completion:
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/abduco-sb
-	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
-	@rm -f ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1
+	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1||true
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
 	@echo removing zsh completion file from ${DESTDIR}${SHAREDIR}/zsh/site-functions
 	@rm -f ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco-sb
 
