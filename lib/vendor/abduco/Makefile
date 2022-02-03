@@ -35,13 +35,13 @@ clean:
 
 dist: clean
 	@echo creating dist tarball
-	@git archive --prefix=abduco-${VERSION}/ -o abduco-sb-${VERSION}.tar.gz HEAD
+	@git archive --prefix=abduco-sb-${VERSION}/ -o abduco-sb-${VERSION}.tar.gz HEAD
 
 installdirs:
 	@${INSTALL} -d ${DESTDIR}${PREFIX}/bin \
 		${DESTDIR}${MANPREFIX}/man1
 
-install: abduco installdirs
+install: abduco-sb installdirs
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
 	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1
