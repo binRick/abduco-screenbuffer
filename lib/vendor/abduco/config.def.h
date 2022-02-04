@@ -1,5 +1,5 @@
 /* default command to execute if non is given and $ABDUCO_CMD is unset */
-#define ABDUCO_CMD "dvtm"
+#define ABDUCO_CMD "/bin/sh"
 /* default detach key, can be overriden at run time using -e option */
 static char KEY_DETACH = CTRL('\\');
 /* redraw key to send a SIGWINCH signal to underlying process
