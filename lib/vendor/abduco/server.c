@@ -329,7 +329,7 @@ static void server_mainloop(void) {
 						ws.ws_col = client_packet.u.ws.cols;
 						ioctl(server.pty, TIOCSWINSZ, &ws);
 					}
-//					kill(-server.pid, SIGWINCH);
+					kill(-server.pid, SIGWINCH);
 					break;
 				case MSG_EXIT:
 					exit_packet_delivered = true;

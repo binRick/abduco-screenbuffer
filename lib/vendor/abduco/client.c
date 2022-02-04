@@ -43,7 +43,7 @@ static void client_setup_terminal(void) {
 	cur_term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
 	cur_term.c_cflag &= ~(CSIZE|PARENB);
 	cur_term.c_cflag |= CS8;
-//	cur_term.c_cc[VLNEXT] = _POSIX_VDISABLE;
+	cur_term.c_cc[VLNEXT] = _POSIX_VDISABLE;
 	cur_term.c_cc[VMIN] = 1;
 	cur_term.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &cur_term);
@@ -59,7 +59,7 @@ static int client_mainloop(void) {
 	sigset_t emptyset, blockset;
 	sigemptyset(&emptyset);
 	sigemptyset(&blockset);
-//	sigaddset(&blockset, SIGWINCH);
+	sigaddset(&blockset, SIGWINCH);
 	sigprocmask(SIG_BLOCK, &blockset, NULL);
 
 	client.need_resize = true;

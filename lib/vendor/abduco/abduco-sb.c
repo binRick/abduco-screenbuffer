@@ -537,7 +537,7 @@ static bool attach_session(const char *name, const bool terminate) {
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = client_sigwinch_handler;
-//	sigaction(SIGWINCH, &sa, NULL);
+	sigaction(SIGWINCH, &sa, NULL);
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGPIPE, &sa, NULL);
 
