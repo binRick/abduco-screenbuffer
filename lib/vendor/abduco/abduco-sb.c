@@ -235,7 +235,7 @@ static void die(const char *s) {
 }
 
 static void usage(void) {
-	fprintf(stderr, "usage: abduco [-a|-A|-c|-n] [-p] [-r] [-q] [-l] [-f] [-e detachkey] [-L num] name command\n");
+	fprintf(stderr, "usage: abduco [-a|-A|-c|-n|-b] [-p] [-r] [-q] [-l] [-f] [-e detachkey] [-L num] name command\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -620,11 +620,12 @@ int main(int argc, char *argv[]) {
 	server.name = basename(argv[0]);
 	gethostname(server.host+1, sizeof(server.host) - 1);
 
-	while ((opt = getopt(argc, argv, "aAclne:fpqrvL:")) != -1) {
+	while ((opt = getopt(argc, argv, "baAclne:fpqrvL:")) != -1) {
 		switch (opt) {
 		case 'a':
 		case 'A':
 		case 'c':
+		case 'b':
 		case 'n':
 			action = opt;
 			break;
@@ -721,6 +722,13 @@ int main(int argc, char *argv[]) {
 		if (action == 'n')
 			break;
 		/* fall through */
+	case 'b':
+		if (!attach_session(server.session_name, true))
+			die("attach-session");
+    fprintf(stderr,"buffer restoration........\n");
+    die("restored");
+    exit(EXIT_SUCCESS);
+		break;
 	case 'a':
 		if (!attach_session(server.session_name, true))
 			die("attach-session");
