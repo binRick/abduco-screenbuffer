@@ -117,7 +117,22 @@ static int client_mainloop(void) {
 				}
 			}
 		}
+    /*
+    char *BUFFER_MODE = getenv("BUFFER_MODE");
 
+    fprintf(stderr, "BUFFER_MODE:%s\n", BUFFER_MODE);
+    if(strcmp(BUFFER_MODE,"1") == 0){
+  //    fprintf(STDIN_FILENO,"xxxx\n");
+//      Packet pkt1 = { .type = MSG_DETACH, .len = 0  };
+      //strncpy(pkt1.u.msg, KEY_DETACH, sizeof(KEY_DETACH));
+		  //client_send_packet(&pkt1);
+    fprintf(stderr, "sending..............\n");
+//			close(server.socket);
+
+	//		return -1;
+      //strlen(np->len))
+      sleep(1);
+    }*/
 		if (FD_ISSET(STDIN_FILENO, &fds)) {
 			Packet pkt = { .type = MSG_CONTENT };
 			ssize_t len = read(STDIN_FILENO, pkt.u.msg, sizeof(pkt.u.msg));

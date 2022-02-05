@@ -620,13 +620,15 @@ int main(int argc, char *argv[]) {
 	server.name = basename(argv[0]);
 	gethostname(server.host+1, sizeof(server.host) - 1);
 
-	while ((opt = getopt(argc, argv, "baAclne:fpqrvL:")) != -1) {
+	while ((opt = getopt(argc, argv, "PtbaAclne:fpqrvL:")) != -1) {
 		switch (opt) {
 		case 'a':
 		case 'A':
 		case 'c':
 		case 'b':
 		case 'n':
+		case 't':
+		case 'P':
 			action = opt;
 			break;
 		case 'e':
@@ -708,7 +710,7 @@ int main(int argc, char *argv[]) {
 	redo:
 	switch (action) {
 	case 'n':
-	case 'c':
+	case 'c': {
 		if (force) {
 			if (session_alive(server.session_name)) {
 				info("session exists and has not yet terminated");
@@ -721,14 +723,29 @@ int main(int argc, char *argv[]) {
 			die("create-session");
 		if (action == 'n')
 			break;
-		/* fall through */
-	case 'b':
-		if (!attach_session(server.session_name, true))
+  }
+	case 'P': 
+	  if (session_exists(server.session_name)){
+      fprintf(stdout,"%d\n", session_exists(server.session_name));
+    }
+		break;
+/*	case 't': 
+    fprintf(stderr,"test %s..............\n", server.session_name);
+	  if (session_exists(server.session_name))
+      fprintf(stderr,"   exists\n");
+    else
+      fprintf(stderr,"   does not exists\n");
+		break;*/
+	case 'b': {
+    setenv("BUFFER_MODE","1", 1);              
+    fprintf(stderr,"buffer restoration>>>>>>>........\n");
+		if (!attach_session(server.session_name, false))
 			die("attach-session");
     fprintf(stderr,"buffer restoration........\n");
     die("restored");
     exit(EXIT_SUCCESS);
 		break;
+  }
 	case 'a':
 		if (!attach_session(server.session_name, true))
 			die("attach-session");
