@@ -44,12 +44,12 @@ installdirs:
 install: abduco-sb installdirs
 	mkdir -p ~/.bin
 	@${INSTALL} -m 0755 abduco-sb ~/.bin
-	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
-	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
-	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
-	@mkdir -p ${DESTDIR}${MANPREFIX}/man1||true
-	@sed "s/VERSION/${VERSION}/g" < abduco-sb.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
-	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
+	@echo installing executable file to /usr/local/bin
+	@${INSTALL} -m 0755 abduco-sb /usr/local/bin
+#	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
+#	@mkdir -p ${DESTDIR}${MANPREFIX}/man1||true
+#	@sed "s/VERSION/${VERSION}/g" < abduco-sb.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
+#	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
 
 install-strip: install
 	${STRIP} ${DESTDIR}${PREFIX}/bin/abduco-sb
