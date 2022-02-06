@@ -42,6 +42,9 @@ installdirs:
 		${DESTDIR}${MANPREFIX}/man1||true
 
 install: abduco-sb installdirs
+	mkdir -p ~/.bin
+	@${INSTALL} -m 0755 abduco-sb ~/.bin
+	
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
 	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
