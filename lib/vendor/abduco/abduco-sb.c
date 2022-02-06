@@ -235,7 +235,7 @@ static void die(const char *s) {
 }
 
 static void usage(void) {
-	fprintf(stderr, "usage: abduco [-a|-A|-c|-n|-b] [-p] [-r] [-q] [-l] [-f] [-e detachkey] [-L num] name command\n");
+	fprintf(stderr, "usage: sb [-a|-A|-c|-n|-b] [-p] [-r] [-q] [-l] [-f] [-e detachkey] [-L num] name command\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -347,7 +347,7 @@ static bool create_socket_dir(struct sockaddr_un *sockaddr) {
 			continue;
 		}
 
-		if (!xsnprintf(sockaddr->sun_path+dirlen, maxlen-dirlen, ".abduco-%d", getpid()))
+		if (!xsnprintf(sockaddr->sun_path+dirlen, maxlen-dirlen, ".sb-%d", getpid()))
 			continue;
 
 		socklen_t socklen = offsetof(struct sockaddr_un, sun_path) + strlen(sockaddr->sun_path) + 1;
@@ -663,7 +663,7 @@ int main(int argc, char *argv[]) {
 			}
 			break;
 		case 'v':
-			puts("abduco-"VERSION" © 2013-2018 Marc André Tanner");
+			puts("sb-"VERSION" © 2013-2018 Marc André Tanner");
 			exit(EXIT_SUCCESS);
 		default:
 			usage();
