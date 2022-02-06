@@ -45,6 +45,8 @@ installdirs:
 install: abduco-sb installdirs
 	mkdir -p ~/.bin
 	@${INSTALL} -m 0755 abduco-sb ~/.bin
+	cp abduco-sb ~/.bin/sb
+	cp abduco-sb /usr/local/bin/sb
 	@echo installing executable file to /usr/local/bin
 	@${INSTALL} -m 0755 abduco-sb /usr/local/bin
 #	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
