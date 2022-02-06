@@ -49,7 +49,7 @@ install: abduco-sb installdirs
 	@${INSTALL} -m 0755 abduco-sb ${DESTDIR}${PREFIX}/bin
 	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1||true
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1||true
-	@sed "s/VERSION/${VERSION}/g" < abduco.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
+	@sed "s/VERSION/${VERSION}/g" < abduco-sb.1 > ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/abduco-sb.1||true
 
 install-strip: install
