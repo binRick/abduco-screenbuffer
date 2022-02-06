@@ -38,8 +38,9 @@ dist: clean
 	@git archive --prefix=abduco-sb-${VERSION}/ -o abduco-sb-${VERSION}.tar.gz HEAD
 
 installdirs:
-	@${INSTALL} -d ${DESTDIR}${PREFIX}/bin \
-		${DESTDIR}${MANPREFIX}/man1||true
+	@${INSTALL} -d ${DESTDIR}${PREFIX}/bin
+# #	\
+#		${DESTDIR}${MANPREFIX}/man1||true
 
 install: abduco-sb installdirs
 	mkdir -p ~/.bin
