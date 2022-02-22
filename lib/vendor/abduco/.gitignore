@@ -7,3 +7,4 @@
 *.gcov
 *.html
 *.o
+.e
