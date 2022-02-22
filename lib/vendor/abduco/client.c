@@ -29,7 +29,7 @@ static bool client_recv_packet(Packet *pkt) {
 
 
 static void client_restore_terminal(void) {
-  log_info("restore term..........");
+  log_debug("restore term..........");
   if (!has_term) {
     return;
   }
@@ -40,7 +40,7 @@ static void client_restore_terminal(void) {
     fflush(stdout);
     alternate_buffer = false;
   }else{
-    log_info("main buffer.");
+    log_debug("main buffer.");
   }
 }
 
@@ -120,13 +120,12 @@ static int client_mainloop(void) {
     if (FD_ISSET(server.socket, &fds)) {
       Packet pkt;
       if (client_recv_packet(&pkt)) {
-        log_info("recv packet of %db.......\n", pkt.len);
+        log_debug("recv packet of %db.......\n", pkt.len);
         switch (pkt.type) {
         case MSG_CONTENT:
           if (!passthrough) {
             write_all(STDOUT_FILENO, pkt.u.msg, pkt.len);
-            log_info("writing packet to stdout of %db.......\n", pkt.len);
-//            rb_t();
+            log_debug("writing packet to stdout of %db.......\n", pkt.len);
             rb_push_stdout((char *)pkt.u.msg);
             ring_buffers_info();
           }

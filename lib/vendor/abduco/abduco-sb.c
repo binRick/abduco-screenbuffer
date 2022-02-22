@@ -581,7 +581,7 @@ static bool create_session(const char *name, char * const argv[]) {
     close(client_pipe[0]);
   } /* switch */
   return(true);
-} /* create_session */
+}   /* create_session */
 
 
 static bool attach_session(const char *name, const bool terminate) {
@@ -684,7 +684,8 @@ static int list_session(void) {
 
 
 int main(int argc, char *argv[]) {
-  log_info("main...........");
+  log_set_level(LOG_INFO);
+  log_debug("main...........");
   int  opt;
   bool force = false;
   char **cmd = NULL, action = '\0';
