@@ -15,82 +15,95 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
+#include <paths.h>
 #include <stdlib.h>
 #include <stropts.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <paths.h>
 
-pid_t forkpty(int *master, char *name, struct termios *tio, struct winsize *ws)
-{
-	int	slave, fd;
-	char   *path;
-	pid_t	pid;
-	struct termios tio2;
 
-	if ((*master = open("/dev/ptc", O_RDWR|O_NOCTTY)) == -1)
-		return -1;
+pid_t forkpty(int *master, char *name, struct termios *tio, struct winsize *ws){
+  int            slave, fd;
+  char           *path;
+  pid_t          pid;
+  struct termios tio2;
 
-	if ((path = ttyname(*master)) == NULL)
-		goto out;
-	if ((slave = open(path, O_RDWR|O_NOCTTY)) == -1)
-		goto out;
+  if ((*master = open("/dev/ptc", O_RDWR | O_NOCTTY)) == -1) {
+    return(-1);
+  }
 
-	switch (pid = fork()) {
-	case -1:
-		goto out;
-	case 0:
-		close(*master);
+  if ((path = ttyname(*master)) == NULL) {
+    goto out;
+  }
+  if ((slave = open(path, O_RDWR | O_NOCTTY)) == -1) {
+    goto out;
+  }
 
-		fd = open(_PATH_TTY, O_RDWR|O_NOCTTY);
-		if (fd >= 0) {
-			ioctl(fd, TIOCNOTTY, NULL);
-			close(fd);
-		}
+  switch (pid = fork()) {
+  case -1:
+    goto out;
+  case 0:
+    close(*master);
 
-		setsid();
+    fd = open(_PATH_TTY, O_RDWR | O_NOCTTY);
+    if (fd >= 0) {
+      ioctl(fd, TIOCNOTTY, NULL);
+      close(fd);
+    }
 
-		fd = open(_PATH_TTY, O_RDWR|O_NOCTTY);
-		if (fd >= 0)
-			return -1;
+    setsid();
 
-		fd = open(path, O_RDWR);
-		if (fd < 0)
-			return -1;
-		close(fd);
+    fd = open(_PATH_TTY, O_RDWR | O_NOCTTY);
+    if (fd >= 0) {
+      return(-1);
+    }
 
-		fd = open("/dev/tty", O_WRONLY);
-		if (fd < 0)
-			return -1;
-		close(fd);
+    fd = open(path, O_RDWR);
+    if (fd < 0) {
+      return(-1);
+    }
+    close(fd);
 
-		if (tcgetattr(slave, &tio2) != 0)
-			return -1;
-		if (tio != NULL)
-			memcpy(tio2.c_cc, tio->c_cc, sizeof tio2.c_cc);
-		tio2.c_cc[VERASE] = '\177';
-		if (tcsetattr(slave, TCSAFLUSH, &tio2) == -1)
-			return -1;
-		if (ioctl(slave, TIOCSWINSZ, ws) == -1)
-			return -1;
+    fd = open("/dev/tty", O_WRONLY);
+    if (fd < 0) {
+      return(-1);
+    }
+    close(fd);
 
-		dup2(slave, 0);
-		dup2(slave, 1);
-		dup2(slave, 2);
-		if (slave > 2)
-			close(slave);
-		return 0;
-	}
+    if (tcgetattr(slave, &tio2) != 0) {
+      return(-1);
+    }
+    if (tio != NULL) {
+      memcpy(tio2.c_cc, tio->c_cc, sizeof tio2.c_cc);
+    }
+    tio2.c_cc[VERASE] = '\177';
+    if (tcsetattr(slave, TCSAFLUSH, &tio2) == -1) {
+      return(-1);
+    }
+    if (ioctl(slave, TIOCSWINSZ, ws) == -1) {
+      return(-1);
+    }
 
-	close(slave);
-	return pid;
+    dup2(slave, 0);
+    dup2(slave, 1);
+    dup2(slave, 2);
+    if (slave > 2) {
+      close(slave);
+    }
+    return(0);
+  } /* switch */
+
+  close(slave);
+  return(pid);
 
 out:
-	if (*master != -1)
-		close(*master);
-	if (slave != -1)
-		close(slave);
-	return -1;
-}
+  if (*master != -1) {
+    close(*master);
+  }
+  if (slave != -1) {
+    close(slave);
+  }
+  return(-1);
+} /* forkpty */

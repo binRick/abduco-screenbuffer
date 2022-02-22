@@ -14,75 +14,89 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <strings.h>
 #include <stropts.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #ifndef TTY_NAME_MAX
-#define TTY_NAME_MAX TTYNAME_MAX
+#define TTY_NAME_MAX    TTYNAME_MAX
 #endif
 
-pid_t forkpty(int *master, char *name, struct termios *tio, struct winsize *ws)
-{
-	int	slave;
-	char   *path;
-	pid_t	pid;
 
-	if ((*master = open("/dev/ptmx", O_RDWR|O_NOCTTY)) == -1)
-		return -1;
-	if (grantpt(*master) != 0)
-		goto out;
-	if (unlockpt(*master) != 0)
-		goto out;
+pid_t forkpty(int *master, char *name, struct termios *tio, struct winsize *ws){
+  int   slave;
+  char  *path;
+  pid_t pid;
 
-	if ((path = ptsname(*master)) == NULL)
-		goto out;
-	if (name != NULL)
-		strlcpy(name, path, TTY_NAME_MAX);
-	if ((slave = open(path, O_RDWR|O_NOCTTY)) == -1)
-		goto out;
+  if ((*master = open("/dev/ptmx", O_RDWR | O_NOCTTY)) == -1) {
+    return(-1);
+  }
+  if (grantpt(*master) != 0) {
+    goto out;
+  }
+  if (unlockpt(*master) != 0) {
+    goto out;
+  }
 
-	switch (pid = fork()) {
-	case -1:
-		goto out;
-	case 0:
-		close(*master);
+  if ((path = ptsname(*master)) == NULL) {
+    goto out;
+  }
+  if (name != NULL) {
+    strlcpy(name, path, TTY_NAME_MAX);
+  }
+  if ((slave = open(path, O_RDWR | O_NOCTTY)) == -1) {
+    goto out;
+  }
 
-		setsid();
+  switch (pid = fork()) {
+  case -1:
+    goto out;
+  case 0:
+    close(*master);
+
+    setsid();
 #ifdef TIOCSCTTY
-		if (ioctl(slave, TIOCSCTTY, NULL) == -1)
-			return -1;
+    if (ioctl(slave, TIOCSCTTY, NULL) == -1) {
+      return(-1);
+    }
 #endif
 
-		if (ioctl(slave, I_PUSH, "ptem") == -1)
-			return -1;
-		if (ioctl(slave, I_PUSH, "ldterm") == -1)
-			return -1;
+    if (ioctl(slave, I_PUSH, "ptem") == -1) {
+      return(-1);
+    }
+    if (ioctl(slave, I_PUSH, "ldterm") == -1) {
+      return(-1);
+    }
 
-		if (tio != NULL && tcsetattr(slave, TCSAFLUSH, tio) == -1)
-			return -1;
-		if (ioctl(slave, TIOCSWINSZ, ws) == -1)
-			return -1;
+    if (tio != NULL && tcsetattr(slave, TCSAFLUSH, tio) == -1) {
+      return(-1);
+    }
+    if (ioctl(slave, TIOCSWINSZ, ws) == -1) {
+      return(-1);
+    }
 
-		dup2(slave, 0);
-		dup2(slave, 1);
-		dup2(slave, 2);
-		if (slave > 2)
-			close(slave);
-		return 0;
-	}
+    dup2(slave, 0);
+    dup2(slave, 1);
+    dup2(slave, 2);
+    if (slave > 2) {
+      close(slave);
+    }
+    return(0);
+  }
 
-	close(slave);
-	return pid;
+  close(slave);
+  return(pid);
 
 out:
-	if (*master != -1)
-		close(*master);
-	if (slave != -1)
-		close(slave);
-	return -1;
-}
+  if (*master != -1) {
+    close(*master);
+  }
+  if (slave != -1) {
+    close(slave);
+  }
+  return(-1);
+} /* forkpty */
