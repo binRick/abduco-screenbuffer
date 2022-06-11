@@ -1,5 +1,5 @@
-#include "/root/bash-loadable-wireguard/src/log/log.c"
-#include "/root/bash-loadable-wireguard/src/log/log.h"
+//#include "/root/bash-loadable-wireguard/src/log/log.c"
+//#include "/root/bash-loadable-wireguard/src/log/log.h"
 
 
 #define FD_SET_MAX(fd, set, maxfd)    do { \
@@ -241,14 +241,14 @@ static void server_send_screen_buffer(Client *c) {
     };
 
     strncpy(pkt.u.msg, np->data, np->len);
-    log_info("server_send_screen_buffer.............. %db", strlen(np->data));
+//    log_info("server_send_screen_buffer.............. %db", strlen(np->data));
     server_send_packet(c, &pkt);
   }
 }
 
 
 static void server_preserve_screen_data(Packet *pkt) {
-  log_info("server_preserve_screen_data...........");
+//  log_info("server_preserve_screen_data...........");
   char         *str, *end;
   uint32_t     len;
   struct entry *scrline = NULL;
@@ -372,7 +372,7 @@ static void server_mainloop(void) {
     if (FD_ISSET(server.pty, &readfds)) {
       pty_data = server_read_pty(&server_packet);
       if (pty_data) {
-        log_info("pty data...............");
+//        log_info("pty data...............");
         server_preserve_screen_data(&server_packet);
       }
     }

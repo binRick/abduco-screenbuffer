@@ -2,7 +2,7 @@
 bool rb_init = false;
 
 
-#include "rb.c"
+//#include "rb.c"
 
 enum PacketType {
   MSG_CONTENT = 0,

@@ -1,4 +1,4 @@
-#include "/root/bash-loadable-wireguard/src/log/log.h"
+//#include "/root/bash-loadable-wireguard/src/log/log.h"
 
 
 static void client_sigwinch_handler(int sig) {
@@ -29,18 +29,18 @@ static bool client_recv_packet(Packet *pkt) {
 
 
 static void client_restore_terminal(void) {
-  log_debug("restore term..........");
+//  log_debug("restore term..........");
   if (!has_term) {
     return;
   }
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_term);
   if (alternate_buffer) {
-    log_info("alt buffer.....");
+//    log_info("alt buffer.....");
     printf("\033[?25h\033[?1049l");
     fflush(stdout);
     alternate_buffer = false;
   }else{
-    log_debug("main buffer.");
+//    log_debug("main buffer.");
   }
 }
 
@@ -120,14 +120,14 @@ static int client_mainloop(void) {
     if (FD_ISSET(server.socket, &fds)) {
       Packet pkt;
       if (client_recv_packet(&pkt)) {
-        log_debug("recv packet of %db.......\n", pkt.len);
+//        log_debug("recv packet of %db.......\n", pkt.len);
         switch (pkt.type) {
         case MSG_CONTENT:
           if (!passthrough) {
             write_all(STDOUT_FILENO, pkt.u.msg, pkt.len);
-            log_debug("writing packet to stdout of %db.......\n", pkt.len);
-            rb_push_stdout((char *)pkt.u.msg);
-            ring_buffers_info();
+  //          log_debug("writing packet to stdout of %db.......\n", pkt.len);
+//            rb_push_stdout((char *)pkt.u.msg);
+//            ring_buffers_info();
           }
           break;
         case MSG_RESIZE:

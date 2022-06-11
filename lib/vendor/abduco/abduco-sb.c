@@ -53,7 +53,7 @@
 #define CTRL(k)    ((k) & 0x1F)
 #endif
 
-#include "/root/bash-loadable-wireguard/src/log/log.h"
+//#include "/root/bash-loadable-wireguard/src/log/log.h"
 #include "config.h"
 #if defined (_AIX)
 #include "forkpty-aix.c"
@@ -684,8 +684,8 @@ static int list_session(void) {
 
 
 int main(int argc, char *argv[]) {
-  log_set_level(LOG_INFO);
-  log_debug("main...........");
+//  log_set_level(LOG_INFO);
+//  log_debug("main...........");
   int  opt;
   bool force = false;
   char **cmd = NULL, action = '\0';

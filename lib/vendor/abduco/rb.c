@@ -1,5 +1,5 @@
-#include "../../../../bash-loadable-wireguard/src/fs/fsio.h"
-#include "../../../../bash-loadable-wireguard/src/string/ring_buffer.h"
+//#include "../../../../bash-loadable-wireguard/src/fs/fsio.h"
+//#include "../../../../bash-loadable-wireguard/src/string/ring_buffer.h"
 #include "rb.h"
 
 #define RB_LOG                  "/tmp/t.log"
@@ -23,7 +23,7 @@ void ring_buffers_info(){
 void flush_ring_buffers(){
   unsigned long ms_since_last_flush = timestamp() - last_flush_ms;
 
-  log_info("ms_since_last_flush:%zums", ms_since_last_flush);
+//  log_info("ms_since_last_flush:%zums", ms_since_last_flush);
   if (ms_since_last_flush < RB_FLUSH_INTERVAL_MS) {
     return;
   }
@@ -34,12 +34,12 @@ void flush_ring_buffers(){
   while (buffer_data_size(rb_stdout) > 0) {
     enum BUFFER_STATUS buff_stat = buffer_pop(rb_stdout, buf, 128);
     if (buff_stat == BS_OK) {
-      log_info("Read from stdout buffer!");
-      fsio_append_text_file(RB_LOG, buf);
+//      log_info("Read from stdout buffer!");
+//      fsio_append_text_file(RB_LOG, buf);
     }else{
-      log_error("Failed to read stdout buffer!, %d", buff_stat);
+  //    log_error("Failed to read stdout buffer!, %d", buff_stat);
     }
-    log_info("Read %d/%d bytes into temp buffer to %s", strlen(buf), buffer_data_size(rb_stdout), RB_LOG);
+    //log_info("Read %d/%d bytes into temp buffer to %s", strlen(buf), buffer_data_size(rb_stdout), RB_LOG);
   }
 }
 
@@ -49,8 +49,8 @@ void init_ring_buffers(){
     return;
   }
 
-  log_info("initizialing ring buffers........");
-  fsio_write_text_file(RB_LOG, "");
+//  log_info("initizialing ring buffers........");
+//  fsio_write_text_file(RB_LOG, "");
   rb_stdout = buffer_init((RBQ * sizeof(char) * RBS));
 
   rb_init = true;
