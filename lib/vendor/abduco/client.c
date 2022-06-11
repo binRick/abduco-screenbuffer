@@ -125,7 +125,7 @@ static int client_mainloop(void) {
         case MSG_CONTENT:
           if (!passthrough) {
             write_all(STDOUT_FILENO, pkt.u.msg, pkt.len);
-  //          log_debug("writing packet to stdout of %db.......\n", pkt.len);
+            //          log_debug("writing packet to stdout of %db.......\n", pkt.len);
 //            rb_push_stdout((char *)pkt.u.msg);
 //            ring_buffers_info();
           }

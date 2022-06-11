@@ -37,7 +37,7 @@ void flush_ring_buffers(){
 //      log_info("Read from stdout buffer!");
 //      fsio_append_text_file(RB_LOG, buf);
     }else{
-  //    log_error("Failed to read stdout buffer!, %d", buff_stat);
+      //    log_error("Failed to read stdout buffer!, %d", buff_stat);
     }
     //log_info("Read %d/%d bytes into temp buffer to %s", strlen(buf), buffer_data_size(rb_stdout), RB_LOG);
   }

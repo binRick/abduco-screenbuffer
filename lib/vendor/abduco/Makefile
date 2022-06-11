@@ -1,7 +1,12 @@
 -include config.mk
 
-VERSION = 0.6
+SED = $(shell command -v gsed)
+PWD = $(shell pwd)
+UNCRUSTIFY=$(shell command -v uncrustify)
+ETC_DIR = $(PWD)/etc
 
+VERSION = 0.6
+TIDIED_FILES=*.c *.h
 CFLAGS_STD ?= -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -DNDEBUG
 CFLAGS_STD += -DVERSION=\"${VERSION}\"
 
@@ -70,3 +75,14 @@ uninstall:
 	@rm -f ${DESTDIR}${SHAREDIR}/zsh/site-functions/_abduco-sb
 
 .PHONY: all clean dist install installdirs install-strip install-completion uninstall debug
+uncrustify:
+	@$(UNCRUSTIFY) -c $(ETC_DIR)/uncrustify.cfg --replace $(TIDIED_FILES) 
+tidy: uncrustify uncrustify-clean fix-dbg         
+fix-dbg:
+	@$(SED) 's|, % s);|, %s);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % lu);|, %lu);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % d);|, %d);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % zu);|, %zu);|g' -i $(TIDIED_FILES)
+UNCRUSTIFY=$(shell command -v uncrustify)
+uncrustify-clean:
+	@find . -type f -name "*unc-back*"|xargs -I % unlink %
